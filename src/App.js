@@ -283,6 +283,10 @@ export function Eval() {
         </PrefButton>
       </Grid>
     )}
+    <Grid item xs={12}>
+      <p>(info about user)</p>
+      <p>{userInfo.age}, {userInfo.income}, {userInfo.education}, {userInfo.postalcode}, {userInfo.consent ? "consented" : "oops"}</p>
+    </Grid>
   </Grid>
   </>
   );
