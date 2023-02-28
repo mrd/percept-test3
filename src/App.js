@@ -235,7 +235,7 @@ export function Eval() {
               refresh();
             }
             return (
-              <Item style={{ width: "60px" }}>
+              <Item style={{ width: "55px" }}>
                 <PrefButton onClick={handleClick}>
                   {bd.smiley}
                   <br />
