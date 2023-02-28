@@ -1,13 +1,48 @@
 import React from 'react';
+import useState from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-import App from './App';
+import { Eval, Index, evalLoader, globalInfo } from './App';
 import reportWebVitals from './reportWebVitals';
+import {
+  useLocation,
+  createBrowserRouter,
+  RouterProvider
+} from "react-router-dom";
+
+// const router = createBrowserRouter([
+//   {
+//     path: "/",
+//     element: <Index />
+//   },
+//   {
+//     path: "eval",
+//     element: <Eval />,
+//     loader: evalLoader
+//   }
+// ]);
+
+
+const CustomRouterProvider = () => {
+  //const [userInfo, setUserInfo] = useState(false);
+  const router = createBrowserRouter([
+    {
+      path: "/",
+      element: <Index />
+    },
+    {
+      path: "eval",
+      element: <Eval />,
+      loader: async () => { return await evalLoader(globalInfo) }
+    }
+  ]);
+  return <RouterProvider router={router} />;
+}
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <App />
+    <CustomRouterProvider />
   </React.StrictMode>
 );
 
