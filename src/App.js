@@ -1,7 +1,7 @@
 import "./App.css";
 import { useEffect, useState } from "react";
 import {
-  useNavigate, useLocation, redirect, useLoaderData
+  useNavigate, redirect, useLoaderData
 } from "react-router-dom";
 import { Grid, Paper, Button, styled } from "@mui/material";
 import React from "react";
@@ -25,7 +25,6 @@ export function Index() {
     event.preventDefault();
     const data = new FormData(event.target);
     const value = Object.fromEntries(data.entries());
-    console.log(value);
     globalInfo.age = value.age;
     globalInfo.consent = value.consent === "on";
     globalInfo.postalcode = value.postalcode;
@@ -84,11 +83,13 @@ export function Index() {
       <Grid item xs={8}>
         <input id="postalcode" name="postalcode" type="text" />
       </Grid>
-      <Grid item xs={12}>
+      <Grid item xs={4}>
         <label htmlFor="consent">
           Consent for data collection:
         </label>
         <input id="consent" name="consent" type="checkbox" />
+      </Grid>
+      <Grid item xs={8}>
         <input type="submit" value="Submit" />
       </Grid>
     </Grid>
@@ -167,14 +168,12 @@ function randompick(arr, num = 1) {
 
 
 function Streetview({ name, centred, id }) {
-  const clas = centred ? "centred" : "edge";
   return <img
         id={id}
-        class={clas}
         src={name}
-        style={{ display: "block" }}
-        width={centred ? "320" : "160"}
-        height={centred ? "240" : "120"}
+        style={{ display: "block", width: centred ? "320px" : "120px" }}
+        width={centred ? "320" : "120"}
+        height={centred ? "240" : "90"}
         alt="streetview"
       />
 }
@@ -186,7 +185,7 @@ const PrefButton = styled(Button)({
 
 export function Eval() {
   const userInfo = useLoaderData();
-  const [showImpressions, setShowImpressions] = useState(false);
+  const [showImpressions, setShowImpressions] = useState(true);
   const [curView, setCurView] = useState({
     thingToRate: null,
     image: null,
@@ -206,8 +205,6 @@ export function Eval() {
   }, []); // run-once with empty deps array
 
   return (<>
-  <p>{userInfo.age}</p>
-  <p>{userInfo.education}</p>
   <Grid
     container
     style={gridStyles}
@@ -250,7 +247,7 @@ export function Eval() {
         </Grid>
       </Grid>
     </Grid>
-    {showImpressions ? (
+    {(curView.impressions && showImpressions) ? (
       <>
         <Grid
           item
@@ -290,55 +287,3 @@ export function Eval() {
   </>
   );
 }
-
-
-// function AppRouter() {
-//   return (
-//     <Router>
-//       <div>
-//         <nav>
-//           <ul>
-//             <li>
-//               <Link to="/">Survey</Link>
-//             </li>
-//             <li>
-//               <Link to="/eval">Eval</Link>
-//             </li>
-//             <li>
-//               <Link to="/products/1">First Product</Link>
-//             </li>
-//             <li>
-//               <Link to="/products/2">Second Product</Link>
-//             </li>
-//           </ul>
-//         </nav>
-//         <Routes>
-//           <Route path="/" exact element={<Index />} />
-//           <Route path="/products/:id" element={<Product />} />
-//         </Routes>
-//       </div>
-//     </Router>
-//   );
-// }
-
-// function App() {
-//   return (
-//     <div className="App">
-//       <header className="App-header">
-//         <img src={logo} className="App-logo" alt="logo" />
-//         <p>
-//           Ok. Edit <code>src/App.js</code> and save to reload.
-//         </p>
-//         <a
-//           className="App-link"
-//           href="https://reactjs.org"
-//           target="_blank"
-//           rel="noopener noreferrer"
-//         >
-//           Learn React
-//         </a>
-//       </header>
-//     </div>
-//   );
-// }
-
