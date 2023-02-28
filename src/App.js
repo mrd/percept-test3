@@ -58,7 +58,7 @@ export function Index() {
         <input type="text" />
       </Grid>
       <Grid item xs={12}>
-        <Button onClick={handleClick}>Submit</Button>
+        <input type="submit" value="Submit" />
       </Grid>
     </Grid>
     </form>
