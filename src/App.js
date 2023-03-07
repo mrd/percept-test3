@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import {
   useNavigate, redirect, useLoaderData
 } from "react-router-dom";
-import { Grid, Paper, Button, styled } from "@mui/material";
+import { FormLabel, FormControl, FormControlLabel, TextField, RadioGroup, Radio, Grid, Paper, Button, styled } from "@mui/material";
 import React from "react";
 
 const Item = styled(Paper)(({ theme }) => ({
@@ -19,17 +19,21 @@ const Item = styled(Paper)(({ theme }) => ({
 export const globalInfo = { age: "", consent: false };
 
 export function Index() {
+  const [preferChecked, setPreferChecked] = useState(false);
+  const [preferredGender, setPreferredGender] = useState('');
   const navigate = useNavigate();
 
   function handleSubmit(event) {
     event.preventDefault();
     const data = new FormData(event.target);
     const value = Object.fromEntries(data.entries());
+    globalInfo.debug = value;
     globalInfo.age = value.age;
     globalInfo.consent = value.consent === "on";
     globalInfo.postalcode = value.postalcode;
     globalInfo.education = value.education;
     globalInfo.income = value.income;
+    globalInfo.gender = value['gender-radio-group'] === "other" ? preferredGender : value['gender-radio-group'];
 
     navigate("/eval", { replace: true, state: value }	);
   }
@@ -42,19 +46,10 @@ export function Index() {
         <label htmlFor="age">Age</label>
       </Grid>
       <Grid item xs={8}>
-        <select id="age" name="age">
-          <option value="18-25">18-25</option>
-          <option value="26-35">26-35</option>
-          <option value="36-45">36-45</option>
-          <option value="46-55">46-55</option>
-          <option value="56-65">56-65</option>
-          <option value="66-75">66-75</option>
-          <option value="76-85">76-85</option>
-          <option value="86+">86+</option>
-        </select>
+        <input id="age" name="age" type="text"/>
       </Grid>
       <Grid item xs={4}>
-        <label htmlFor="income">Income</label>
+        <label htmlFor="income">Monthly Gross Income</label>
       </Grid>
       <Grid item xs={8}>
         <select id="income" name="income">
@@ -67,15 +62,39 @@ export function Index() {
         </select>
       </Grid>
       <Grid item xs={4}>
-        <label htmlFor="education">Education</label>
+        <label htmlFor="education">Education Level</label>
       </Grid>
       <Grid item xs={8}>
         <select id="education" name="education">
-          <option value="high school">High School only</option>
+          <option value="no university">No University</option>
           <option value="in university">In University</option>
           <option value="bachelors">Bachelor's or equivalent</option>
-          <option value="graduate">Postgraduate or Professional</option>
+          <option value="postgraduate">Postgraduate or Professional</option>
         </select>
+      </Grid>
+      <Grid item xs={4}>
+        <FormLabel id="gender-group-label" htmlFor="gender-radio-group">Gender: how do you identify?</FormLabel>
+      </Grid>
+      <Grid item xs={8}>
+        <FormControl>
+          <RadioGroup name="gender-radio-group">
+            <FormControlLabel value="woman" control={<Radio/>} label="Woman"/>
+            <FormControlLabel value="non-binary" control={<Radio/>} label="Non-binary"/>
+            <FormControlLabel value="man" control={<Radio/>} label="Man"/>
+            <FormControlLabel control={<Radio checked={preferChecked}
+                                              onClick={() => setPreferChecked(!preferChecked)} value="other"
+                                              label="Prefer to self-describe"/>}
+                              label={
+                                  preferChecked ? (
+                                    <TextField disabled={!preferChecked} label="Please Specify" onKeyDown={
+                                        (e) => setPreferredGender(e.target.value)
+                                      }
+                                    />
+                                  ) : "Prefer to self-describe"
+                              }
+            />
+          </RadioGroup>
+        </FormControl>
       </Grid>
       <Grid item xs={4}>
         <label htmlFor="postalcode">Postal code</label>
@@ -284,7 +303,7 @@ export function Eval() {
       </Grid>
     )}
     <Grid item xs={12}>
-      <p>(info about user)</p>
+      <p><i>(debugging info about user)</i></p>
       <p>{userInfo.age}, {userInfo.income}, {userInfo.education}, {userInfo.postalcode}, {userInfo.consent ? "consented" : "oops"}</p>
     </Grid>
   </Grid>
