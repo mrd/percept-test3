@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import {
   useNavigate, redirect, useLoaderData
 } from "react-router-dom";
-import { FormLabel, FormControl, FormControlLabel, TextField, RadioGroup, Radio, Grid, Paper, Button, styled } from "@mui/material";
+import { FormLabel, FormControl, FormControlLabel, FormGroup, TextField, RadioGroup, Radio, Grid, Paper, Button, styled, Checkbox } from "@mui/material";
 import React from "react";
 
 const Item = styled(Paper)(({ theme }) => ({
@@ -38,49 +38,53 @@ export function Index() {
     navigate("/eval", { replace: true, state: value }	);
   }
 
+  const currency='€';
+  const radioGroupStyle = {border: 1, marginTop: "5px", marginBottom: "5px", padding: "5px"};
   return <form onSubmit={handleSubmit}>
     <h1>About</h1>
     <p> This project gathers data about your perceptions of different street scenes... </p>
     <Grid container>
       <Grid item xs={4}>
-        <label htmlFor="age">Age</label>
+        <FormLabel id="age-label" htmlFor="age">Age</FormLabel>
       </Grid>
       <Grid item xs={8}>
-        <input id="age" name="age" type="text"/>
+        <TextField name="age" id="age" label="Age" />
       </Grid>
       <Grid item xs={4}>
-        <label htmlFor="income">Monthly Gross Income</label>
+        <FormLabel id="income-group-label" htmlFor="income">Monthly Gross Income</FormLabel>
       </Grid>
       <Grid item xs={8}>
-        <select id="income" name="income">
-          <option value="0-20k">0-20k</option>
-          <option value="20k-40k">20k-40k</option>
-          <option value="40k-60k">40k-60k</option>
-          <option value="60k-80k">60k-80k</option>
-          <option value="80k-100k">80k-100k</option>
-          <option value="100k+">100k+</option>
-        </select>
+        <FormControl>
+          <RadioGroup sx={radioGroupStyle} name="income">
+            <FormControlLabel value="0-1499" control={<Radio/>} label={currency+"0-1499"}/>
+            <FormControlLabel value="1500-2999" control={<Radio/>} label={currency+"1500-2999"}/>
+            <FormControlLabel value="3000-4499" control={<Radio/>} label={currency+"3000-4499"}/>
+            <FormControlLabel value="4500+" control={<Radio/>} label={currency+"4500+"}/>
+          </RadioGroup>
+        </FormControl>
       </Grid>
       <Grid item xs={4}>
-        <label htmlFor="education">Education Level</label>
+        <FormLabel id="education-group-label" htmlFor="education">Education Level</FormLabel>
       </Grid>
       <Grid item xs={8}>
-        <select id="education" name="education">
-          <option value="no university">No University</option>
-          <option value="in university">In University</option>
-          <option value="bachelors">Bachelor's or equivalent</option>
-          <option value="postgraduate">Postgraduate or Professional</option>
-        </select>
+        <FormControl>
+          <RadioGroup sx={radioGroupStyle} name="education">
+            <FormControlLabel value="no university" control={<Radio/>} label="No University"/>
+            <FormControlLabel value="in university" control={<Radio/>} label="In University now"/>
+            <FormControlLabel value="bachelors" control={<Radio/>} label="Bachelor's or equivalent"/>
+            <FormControlLabel value="postgraduate" control={<Radio/>} label="Postgraduate or Professional"/>
+          </RadioGroup>
+        </FormControl>
       </Grid>
       <Grid item xs={4}>
         <FormLabel id="gender-group-label" htmlFor="gender-radio-group">Gender: how do you identify?</FormLabel>
       </Grid>
       <Grid item xs={8}>
         <FormControl>
-          <RadioGroup name="gender-radio-group">
-            <FormControlLabel value="woman" control={<Radio/>} label="Woman"/>
-            <FormControlLabel value="non-binary" control={<Radio/>} label="Non-binary"/>
-            <FormControlLabel value="man" control={<Radio/>} label="Man"/>
+          <RadioGroup sx={radioGroupStyle} name="gender-radio-group">
+            <FormControlLabel value="woman" control={<Radio/>} label="Woman" onClick={() => setPreferChecked(false)} />
+            <FormControlLabel value="non-binary" control={<Radio/>} label="Non-binary" onClick={() => setPreferChecked(false)} />
+            <FormControlLabel value="man" control={<Radio/>} label="Man" onClick={() => setPreferChecked(false)} />
             <FormControlLabel control={<Radio checked={preferChecked}
                                               onClick={() => setPreferChecked(!preferChecked)} value="other"
                                               label="Prefer to self-describe"/>}
@@ -97,16 +101,20 @@ export function Index() {
         </FormControl>
       </Grid>
       <Grid item xs={4}>
-        <label htmlFor="postalcode">Postal code</label>
+        <FormLabel id="postalcode-label" htmlFor="postalcode">Postal code</FormLabel>
       </Grid>
       <Grid item xs={8}>
-        <input id="postalcode" name="postalcode" type="text" />
+        <FormControl>
+          <TextField id="postalcode" name="postalcode" label="Postal Code" />
+        </FormControl>
       </Grid>
       <Grid item xs={4}>
-        <label htmlFor="consent">
-          Consent for data collection:
-        </label>
-        <input id="consent" name="consent" type="checkbox" />
+          <FormLabel id="consent-label" htmlFor="consent">Consent for data collection?</FormLabel>
+      </Grid>
+      <Grid item xs={8}>
+        <FormGroup>
+          <FormControlLabel control={<Checkbox name="consent"/>} label="Yes, I consent to data collection for this research"/>
+        </FormGroup>
       </Grid>
       <Grid item xs={8}>
         <input type="submit" value="Submit" />
@@ -304,7 +312,7 @@ export function Eval() {
     )}
     <Grid item xs={12}>
       <p><i>(debugging info about user)</i></p>
-      <p>{userInfo.age}, {userInfo.income}, {userInfo.education}, {userInfo.postalcode}, {userInfo.consent ? "consented" : "oops"}</p>
+      <p>{userInfo.age}, {userInfo.income}, {userInfo.education}, {userInfo.gender}, {userInfo.postalcode}, {userInfo.consent ? "consented" : "oops"}</p>
     </Grid>
   </Grid>
   </>
