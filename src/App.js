@@ -5,6 +5,7 @@ import {
 } from "react-router-dom";
 import { FormLabel, FormControl, FormControlLabel, FormGroup, TextField, RadioGroup, Radio, Grid, Paper, Button, styled, Checkbox } from "@mui/material";
 import React from "react";
+import { backendFetchURL } from "./config.js";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -219,12 +220,13 @@ export function Eval() {
     impressions: null
   });
 
-  function refresh() {
-    const imgs = randompick(amsImgs, 4);
+  async function refresh() {
+    const response = await fetch(backendFetchURL);
+    const json = await response.json();
     setCurView({
       thingToRate: randompick(thingsToRate)[0],
-      image: imgs[0],
-      impressions: imgs.slice(1, 4)
+      image: json['main_image']['url'],
+      impressions: json['impressions'].map((i) => i['url'])
     });
   }
   useEffect(() => {
