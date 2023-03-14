@@ -43,7 +43,7 @@ export function Index() {
   return <form onSubmit={handleSubmit}>
     <h1>About</h1>
     <p> This project gathers data about your perceptions of different street scenes... </p>
-    <Grid container>
+    <Grid container alignItems="center">
       <Grid item xs={4}>
         <FormLabel id="age-label" htmlFor="age">Age</FormLabel>
       </Grid>
